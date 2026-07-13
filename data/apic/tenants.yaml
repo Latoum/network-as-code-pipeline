@@ -1,0 +1,20 @@
+---
+# Declarative intent: this file IS the network. Change it via pull request.
+apic:
+  tenants:
+    - name: DEMO
+      description: Demonstration tenant for the as-code pipeline
+      vrfs:
+        - name: PROD
+        - name: DEV
+      bridge_domains:
+        - name: vlan_101
+          vrf: PROD
+          subnets:
+            - ip: 10.10.101.1/24
+              public: false
+        - name: vlan_102
+          vrf: DEV
+          subnets:
+            - ip: 10.10.102.1/24
+              public: false
