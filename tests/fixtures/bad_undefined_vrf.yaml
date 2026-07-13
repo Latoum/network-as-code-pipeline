@@ -1,0 +1,9 @@
+---
+apic:
+  tenants:
+    - name: T1
+      vrfs:
+        - name: A
+      bridge_domains:
+        - name: bd1
+          vrf: MISSING
