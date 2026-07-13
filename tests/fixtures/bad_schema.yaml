@@ -1,0 +1,4 @@
+---
+apic:
+  tenants:
+    - name: "bad name with spaces!"
