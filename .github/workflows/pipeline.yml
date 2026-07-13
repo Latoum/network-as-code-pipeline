@@ -1,0 +1,24 @@
+name: as-code pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    name: "Pre-change gates: format / syntax / semantics / compliance"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Validate data model
+        run: >
+          python scripts/validate.py
+          --schema schemas/tenant_schema.json
+          --data data/apic/tenants.yaml
+      - name: Run test suite
+        run: pytest tests/ -v
