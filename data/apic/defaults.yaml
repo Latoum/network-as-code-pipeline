@@ -1,0 +1,12 @@
+---
+# Org-wide defaults applied to every object of a given type.
+# Defining suffixes once removes a whole class of human naming errors.
+defaults:
+  apic:
+    tenants:
+      vrfs:
+        name_suffix: _vrf
+      bridge_domains:
+        name_suffix: _bd
+        unicast_routing: true
+        arp_flooding: false
