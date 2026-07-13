@@ -1,0 +1,20 @@
+---
+apic: include('apic', required=False)
+defaults: any(required=False)
+---
+apic:
+  tenants: list(include('tenant'), min=1)
+tenant:
+  name: regex('^[a-zA-Z0-9_-]{1,64}$', name='tenant name')
+  description: str(required=False)
+  vrfs: list(include('vrf'), required=False)
+  bridge_domains: list(include('bridge_domain'), required=False)
+vrf:
+  name: str()
+bridge_domain:
+  name: str()
+  vrf: str()
+  subnets: list(include('subnet'), required=False)
+subnet:
+  ip: regex('^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$', name='CIDR address')
+  public: bool(required=False)
