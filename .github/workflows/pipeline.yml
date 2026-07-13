@@ -7,7 +7,7 @@ on:
 
 jobs:
   validate:
-    name: "Pre-change gates: format / syntax / semantics / compliance"
+    name: "Pre-change gate: nac-validate (syntax + semantic rules)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,10 +15,18 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
-      - name: Validate data model
-        run: >
-          python scripts/validate.py
-          --schema schemas/tenant_schema.json
-          --data data/apic/tenants.yaml
-      - name: Run test suite
+      - name: nac-validate against the source of truth
+        run: nac-validate -s .schema.yaml -r rules/ data/apic/
+      - name: Test suite (gates verified against known-bad fixtures)
         run: pytest tests/ -v
+
+  terraform:
+    name: "Deploy stage: Network-as-Code ACI module (plan-safe validation)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: terraform init (downloads netascode/nac-aci module)
+        run: terraform -chdir=terraform init -backend=false
+      - name: terraform validate
+        run: terraform -chdir=terraform validate
